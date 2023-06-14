@@ -1,8 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const userRoutes = require('./routes/apiRoutes');
-const thoughtRoutes = require('./routes/apiRoutes');
-const reactionRoutes = require('./routes/apiRoutes');
+const routes = require('./routes');
 
 
 
@@ -26,17 +24,16 @@ mongoose.connect('mongodb://localhost/social_network_db')
     });
 
     app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(express.static(__dirname + 'public'));
 
+    app.use(routes);
     
 
-    app.use('/api', userRoutes);
-    app.use('/api', thoughtRoutes);
-    app.use('/api', reactionRoutes);
-
     
     
 
 
-    // module.exports = mongoose.model('User', userSchema);
+    ;
 
     app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));

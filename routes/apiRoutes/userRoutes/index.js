@@ -1,16 +1,25 @@
-const express = require('express');
-const router = express.Router();
-const { User, Thought } = require('../../models');
+const router = require('express').Router();
+const { User } = require('../../../models/User');
 
-router.get('/users', async (req, res) => {
+router.post('/users', async (req, res) => {
     try {
-        const users = await User.find({});
-        res.json(users);
-    } catch {
-        res.status(500).json(err);
-
+      const user = await User.create(req.body);
+      if (!user) {
+        res.status(404).json({ message: 'No user found with this id!' });
+        return;
+      }
+      const friend = await User.findById(req.body.friendId);
+      if (!friend) {
+        res.status(404).json({ message: 'No friend found with this id!' });
+        return;
+      }
+      user.friends.push(friend);
+      await user.save();
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
     }
-});
+  });
 
 router.get('/users/:id', async (req, res) => {
     try {

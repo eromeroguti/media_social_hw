@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { User, Thought } = require('../../models');
-
+const { User, Thought } = require('../../../models/Thought');
 //get all thoughts
-router.get('/', async (req, res) => {
+router.get('/thoughts', async (req, res) => {
     try {
       const thoughts = await Thought.find({});
       res.json(thoughts);
@@ -14,7 +13,7 @@ router.get('/', async (req, res) => {
   
 
 // post new thought
-router.get('/', async (req, res) => {
+router.get('/thoughts', async (req, res) => {
     try {
         const thought = await Thought.findById(req.params.id).populate('reactions');
         const user = await User.findById(req.params.id).populate('thoughts');
@@ -27,7 +26,7 @@ router.get('/', async (req, res) => {
 });
 
 // update thought by id
-router.put('/:id', async (req, res) => {
+router.put('/thoughts/:id', async (req, res) => {
     try {
         const thought = await Thought.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!thought) {
@@ -41,7 +40,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // delete thought by id
-router.delete('/:id', async (req, res) => {
+router.delete('/thought/:id', async (req, res) => {
     try {
         const thought = await Thought.findByIdAndDelete(req.params.id);
         if (!thought) {
